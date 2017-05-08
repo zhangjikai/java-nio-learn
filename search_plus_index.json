@@ -1,1 +1,1 @@
-{"./":{"url":"./","title":"前言","keywords":"","body":"Java NIO 学习笔记 NIO（New IO）是 JDK1 1.4 之后引入的特性，它在标准的 Java 代码中提供了高速的面向块的 IO。 Java NIO Tutorial [Java NIO系列教程](http://ifeve.com/overview/ "}}
+{"./":{"url":"./","title":"前言","keywords":"","body":"Java NIO 学习笔记 NIO（New IO）是 JDK1 1.4 之后引入的特性，它在标准的 Java 代码中提供了高速的面向块的 IO。 Java NIO Tutorial Java NIO系列教程 "},"基础.html":{"url":"基础.html","title":"基础","keywords":"","body":"NIO 前言 缓冲区 前言 Java NIO 主要包含三个重要的概念： 缓冲区 通道 选择器 我们依次来看下相关的知识。 缓冲区 "}}
