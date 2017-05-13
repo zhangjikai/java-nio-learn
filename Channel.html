@@ -1,0 +1,501 @@
+
+<!DOCTYPE HTML>
+<html lang="zh-hans" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Channel · Java NIO Learn</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        <meta name="author" content="zhangjikai">
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search-plus/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-prism/prism-base16-ateliersulphurpool.light.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-anchors/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-disqus/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-anchor-navigation-ex/style/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fancybox/jquery.fancybox.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fancybox/jquery.fancybox-buttons.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="styles/website.css">
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+    <link rel="prev" href="Buffer.html" />
+    
+
+    
+        <link rel="shortcut icon" href='favicon.ico' type="image/x-icon">
+    
+    
+        <link rel="bookmark" href='favicon.ico' type="image/x-icon">
+    
+    
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="输入并搜索" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+    
+        
+        <li>
+            <a href="http://www.zhangjikai.com" target="_blank" class="custom-link">Home</a>
+        </li>
+    
+    
+
+    
+    <li class="divider"></li>
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                        <b>1.1.</b>
+                    
+                    前言
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="基础.html">
+            
+                <a href="基础.html">
+            
+                    
+                        <b>1.2.</b>
+                    
+                    基础
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="Buffer.html">
+            
+                <a href="Buffer.html">
+            
+                    
+                        <b>1.2.1.</b>
+                    
+                    Buffer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.2.2" data-path="Channel.html">
+            
+                <a href="Channel.html">
+            
+                    
+                        <b>1.2.2.</b>
+                    
+                    Channel
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            本书使用 GitBook 发布
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Channel</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <div id="anchor-navigation-ex-navbar"><i class="fa fa-anchor"></i><ul><li><a href="#&#x901A;&#x9053;">&#x901A;&#x9053;</a></li><ul><li><a href="#filechannel">FileChannel</a></li><ul><li><a href="#&#x6253;&#x5F00;">&#x6253;&#x5F00;</a></li><li><a href="#&#x4ECE;-filechannel&#x4E2D;&#x8BFB;&#x53D6;&#x6570;&#x636E;">&#x4ECE; FileChannel&#x4E2D;&#x8BFB;&#x53D6;&#x6570;&#x636E;</a></li><li><a href="#&#x5411;-filechannel-&#x4E2D;&#x5199;&#x5165;&#x6570;&#x636E;">&#x5411; FileChannel &#x4E2D;&#x5199;&#x5165;&#x6570;&#x636E;</a></li><li><a href="#&#x5173;&#x95ED;-filechannel">&#x5173;&#x95ED; FileChannel</a></li><li><a href="#position">position</a></li><li><a href="#size">size</a></li><li><a href="#truncate">truncate</a></li><li><a href="#force">force</a></li><li><a href="#&#x6587;&#x4EF6;&#x9501;&#x5B9A;">&#x6587;&#x4EF6;&#x9501;&#x5B9A;</a></li></ul></ul></ul></div><a href="#&#x901A;&#x9053;" id="anchorNavigationExGoTop"><i class="fa fa-arrow-up"></i></a><h1 id="&#x901A;&#x9053;"><a name="&#x901A;&#x9053;" class="anchor-navigation-ex-anchor" href="#&#x901A;&#x9053;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x901A;&#x9053;</h1>
+<!-- toc -->
+<ul>
+<li><a href="#filechannel">FileChannel</a><ul>
+<li><a href="#&#x6253;&#x5F00;">&#x6253;&#x5F00;</a></li>
+<li><a href="#&#x4ECE;-filechannel&#x4E2D;&#x8BFB;&#x53D6;&#x6570;&#x636E;">&#x4ECE; FileChannel&#x4E2D;&#x8BFB;&#x53D6;&#x6570;&#x636E;</a></li>
+<li><a href="#&#x5411;-filechannel-&#x4E2D;&#x5199;&#x5165;&#x6570;&#x636E;">&#x5411; FileChannel &#x4E2D;&#x5199;&#x5165;&#x6570;&#x636E;</a></li>
+<li><a href="#&#x5173;&#x95ED;-filechannel">&#x5173;&#x95ED; FileChannel</a></li>
+<li><a href="#position">position</a></li>
+<li><a href="#size">size</a></li>
+<li><a href="#truncate">truncate</a></li>
+<li><a href="#force">force</a></li>
+<li><a href="#&#x6587;&#x4EF6;&#x9501;&#x5B9A;">&#x6587;&#x4EF6;&#x9501;&#x5B9A;</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+<p>&#x901A;&#x9053;&#xFF08;Channel&#xFF09; &#x63D0;&#x4F9B;&#x4E0E; IO &#x670D;&#x52A1;&#x7684;&#x76F4;&#x63A5;&#x8FDE;&#x63A5;&#xFF0C;&#x4F7F;&#x7528; Channel &#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5728;&#x5B57;&#x8282;&#x7F13;&#x51B2;&#x533A;&#x548C;&#x901A;&#x9053;&#x53E6;&#x4E00;&#x4FA7;&#x7684;&#x5B9E;&#x4F53;&#xFF08;&#x901A;&#x5E38;&#x662F;&#x4E00;&#x4E2A;&#x6587;&#x4EF6;&#x6216;&#x8005;&#x5957;&#x63A5;&#x5B57;&#xFF09;&#x4E4B;&#x95F4;&#x6709;&#x6548;&#x7684;&#x4F20;&#x8F93;&#x6570;&#x636E;&#x3002;Channel &#x4E3B;&#x8981;&#x5206;&#x4E3A;&#x4E24;&#x7C7B;&#xFF1A;File Channel&#xFF08;&#x6587;&#x4EF6;&#x901A;&#x9053;&#xFF09;&#x548C; Socket Channel&#xFF08;&#x5957;&#x63A5;&#x5B57;&#x901A;&#x9053;&#xFF09;</p>
+<h2 id="filechannel"><a name="filechannel" class="anchor-navigation-ex-anchor" href="#filechannel"><i class="fa fa-link" aria-hidden="true"></i></a>FileChannel</h2>
+<p>FileChannel &#x4E3B;&#x8981;&#x7528;&#x6765;&#x5904;&#x7406;&#x6587;&#x4EF6;&#xFF0C;FileChannel &#x603B;&#x662F;&#x8FD0;&#x884C;&#x5728;&#x963B;&#x585E;&#x6A21;&#x5F0F;&#x4E0B;&#xFF0C;&#x65E0;&#x6CD5;&#x5C06;&#x5176;&#x8BBE;&#x7F6E;&#x4E3A;&#x975E;&#x963B;&#x585E;&#x6A21;&#x5F0F;&#x3002;FileChannel &#x662F;&#x7EBF;&#x7A0B;&#x5B89;&#x5168;&#x7684;&#xFF0C;&#x591A;&#x4E2A;&#x8FDB;&#x7A0B;&#x53EF;&#x4EE5;&#x5728;&#x540C;&#x4E00;&#x4E2A;&#x5B9E;&#x4F8B;&#x4E0A;&#x5E76;&#x53D1;&#x8C03;&#x7528;&#x76F8;&#x5173;&#x65B9;&#x6CD5;&#xFF0C;&#x4E0D;&#x8FC7;&#x5BF9;&#x4E8E;&#x5F71;&#x54CD; Channel &#x4F4D;&#x7F6E;&#xFF08;position&#xFF09;&#x6216;&#x8005;&#x6587;&#x4EF6;&#x5927;&#x5C0F;&#x7684;&#x64CD;&#x4F5C;&#x90FD;&#x8FDB;&#x884C;&#x540C;&#x6B65;&#x5904;&#x7406;&#x3002;</p>
+<h3 id="&#x6253;&#x5F00;"><a name="&#x6253;&#x5F00;" class="anchor-navigation-ex-anchor" href="#&#x6253;&#x5F00;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x6253;&#x5F00;</h3>
+<p>FileChannel &#x4E0D;&#x80FD;&#x76F4;&#x63A5;&#x521B;&#x5EFA;&#xFF0C;&#x800C;&#x662F;&#x8981;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x6587;&#x4EF6;&#x5BF9;&#x8C61;&#xFF08;RandomAccessFile&#x3001;FileInputStream&#x3001;FileOutputStream&#xFF09;&#xFF0C;&#x7136;&#x540E;&#x518D;&#x8C03;&#x7528; getChannel &#x65B9;&#x6CD5;&#x83B7;&#x5F97;&#x3002;</p>
+<pre class="language-"><code class="lang-java">RandomAccessFile randomAccessFile <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RandomAccessFile</span><span class="token punctuation">(</span>filePath<span class="token punctuation">,</span> <span class="token string">&quot;rw&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+FileChannel fileChannel <span class="token operator">=</span> randomAccessFile<span class="token punctuation">.</span><span class="token function">getChannel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>RandomAccessFile &#x6253;&#x5F00;&#x6587;&#x4EF6;&#x7684;&#x6A21;&#x5F0F;&#x6709;&#x4E0B;&#x9762;&#x56DB;&#x79CD;</p>
+<ul>
+<li>&quot;r&quot; - &#x53EA;&#x8BFB;</li>
+<li>&quot;rw&quot; - &#x53EF;&#x8BFB;&#x5199;&#x6587;&#x4EF6;&#xFF0C;&#x5982;&#x679C;&#x6587;&#x4EF6;&#x4E0D;&#x5B58;&#x5728;&#xFF0C;&#x5219;&#x521B;&#x5EFA;&#x6587;&#x4EF6;</li>
+<li>&quot;rws&quot; - &#x53EF;&#x8BFB;&#x5199;&#x6587;&#x4EF6;&#xFF0C;&#x5E76;&#x4E14;&#x6587;&#x4EF6;&#x6570;&#x636E;&#x4EE5;&#x53CA;&#x5143;&#x6570;&#x636E;&#x7684;&#x6BCF;&#x4E2A;&#x66F4;&#x65B0;&#x90FD;&#x4F1A;&#x5199;&#x5165;&#x78C1;&#x76D8;</li>
+<li>&quot;rwd&quot; - &#x53EF;&#x8BFB;&#x5199;&#x6587;&#x4EF6;&#xFF0C;&#x5E76;&#x4E14;&#x6587;&#x4EF6;&#x6570;&#x636E;&#x7684;&#x6BCF;&#x4E2A;&#x66F4;&#x65B0;&#x64CD;&#x4F5C;&#x90FD;&#x4F1A;&#x5199;&#x5165;&#x5230;&#x78C1;&#x76D8;</li>
+</ul>
+<p>RandomAccessFile &#x5BF9;&#x8C61;&#x91C7;&#x7528; lazy-load &#x7684;&#x65B9;&#x5F0F;&#x521B;&#x5EFA; FileChannel&#xFF0C;&#x521B;&#x5EFA;&#x5B8C;&#x4E4B;&#x540E;&#x4F1A;&#x5C06; FileChannel &#x7F13;&#x5B58;&#x8D77;&#x6765;&#xFF0C;&#x5E76;&#x8FDB;&#x884C;&#x4E86;&#x540C;&#x6B65;&#x5904;&#x7406;&#xFF0C;&#x4E0B;&#x9762;&#x662F;&#x76F8;&#x5173;&#x4EE3;&#x7801;&#xFF1A;</p>
+<pre class="language-"><code class="lang-java"><span class="token keyword">public</span> <span class="token keyword">final</span> FileChannel <span class="token function">getChannel</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">synchronized</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>channel <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            channel <span class="token operator">=</span> FileChannelImpl<span class="token punctuation">.</span><span class="token function">open</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> path<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> rw<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> channel<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="&#x4ECE;-filechannel&#x4E2D;&#x8BFB;&#x53D6;&#x6570;&#x636E;"><a name="&#x4ECE;-filechannel&#x4E2D;&#x8BFB;&#x53D6;&#x6570;&#x636E;" class="anchor-navigation-ex-anchor" href="#&#x4ECE;-filechannel&#x4E2D;&#x8BFB;&#x53D6;&#x6570;&#x636E;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x4ECE; FileChannel&#x4E2D;&#x8BFB;&#x53D6;&#x6570;&#x636E;</h3>
+<p>&#x901A;&#x8FC7; read &#x65B9;&#x6CD5;&#x53EF;&#x4EE5;&#x4ECE; FileChannel &#x4E2D;&#x5C06;&#x6570;&#x636E;&#x8BFB;&#x5230; Buffer &#x4E2D;&#xFF0C;read &#x65B9;&#x6CD5;&#x4F1A;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A; int &#x503C;&#x8868;&#x793A;&#x6709;&#x591A;&#x5C11;&#x4E2A;&#x5B57;&#x8282;&#x88AB;&#x8BFB;&#x5230;&#x4E86; Buffer &#x4E2D;&#xFF0C;&#x5982;&#x679C;&#x8FD4;&#x56DE; -1&#xFF0C;&#x8BF4;&#x660E;&#x5230;&#x4E86;&#x6587;&#x4EF6;&#x672B;&#x5C3E;&#x3002;&#x4ECE; Channel &#x8BFB;&#x53D6;&#x6570;&#x636E;&#x7684;&#x8FC7;&#x7A0B;&#x4E2D;&#x4F1A;&#x9488;&#x5BF9; Channel &#x8FDB;&#x884C;&#x540C;&#x6B65;&#x5904;&#x7406;&#x3002;</p>
+<pre class="language-"><code class="lang-java">ByteBuffer byteBuffer <span class="token operator">=</span> ByteBuffer<span class="token punctuation">.</span><span class="token function">allocate</span><span class="token punctuation">(</span><span class="token number">64</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> byteRead <span class="token operator">=</span> fileChannel<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span>byteBuffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>&#x4E0B;&#x9762;&#x662F; FileChannel&#x4E2D; &#x51E0;&#x4E2A;&#x76F8;&#x5173;&#x7684; read &#x65B9;&#x6CD5;&#xFF1A;</p>
+<pre class="language-"><code class="lang-java"><span class="token comment" spellcheck="true">// &#x8BFB;&#x53D6;&#x6570;&#x636E;&#x5230;&#x7F13;&#x51B2;&#x533A;</span>
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">int</span> <span class="token function">read</span><span class="token punctuation">(</span>ByteBuffer dst<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// &#x4ECE;&#x6307;&#x5B9A;&#x7684; position &#x5904;&#x5F00;&#x59CB;&#x8BFB;&#x53D6;&#x6570;&#x636E;</span>
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">int</span> <span class="token function">read</span><span class="token punctuation">(</span>ByteBuffer dst<span class="token punctuation">,</span> <span class="token keyword">long</span> position<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// &#x4EE5; scatter &#x65B9;&#x5F0F;&#x8BFB;&#x53D6;&#x6587;&#x4EF6;&#xFF0C;&#x5373;&#x5C06;&#x6587;&#x4EF6;&#x5185;&#x5BB9;&#x8BFB;&#x53D6;&#x5230;&#x591A;&#x4E2A;&#x7F13;&#x51B2;&#x533A;</span>
+<span class="token comment" spellcheck="true">// offset &#x6307;&#x5B9A;&#x4ECE;&#x54EA;&#x4E2A;&#x7F13;&#x51B2;&#x533A;&#x5F00;&#x59CB;&#x5199;&#x5165;&#xFF0C;length &#x8868;&#x793A;&#x4F7F;&#x7528;&#x7684;&#x7F13;&#x51B2;&#x533A;&#x6570;&#x91CF;</span>
+<span class="token keyword">public</span> <span class="token keyword">long</span> <span class="token function">read</span><span class="token punctuation">(</span>ByteBuffer<span class="token punctuation">[</span><span class="token punctuation">]</span> dsts<span class="token punctuation">,</span> <span class="token keyword">int</span> offset<span class="token punctuation">,</span> <span class="token keyword">int</span> length<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// &#x4EE5; scatter &#x65B9;&#x5F0F;&#x8BFB;&#x53D6;&#x6587;&#x4EF6;</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">long</span> <span class="token function">read</span><span class="token punctuation">(</span>ByteBuffer<span class="token punctuation">[</span><span class="token punctuation">]</span> dsts<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token function">read</span><span class="token punctuation">(</span>dsts<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> dsts<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="&#x5411;-filechannel-&#x4E2D;&#x5199;&#x5165;&#x6570;&#x636E;"><a name="&#x5411;-filechannel-&#x4E2D;&#x5199;&#x5165;&#x6570;&#x636E;" class="anchor-navigation-ex-anchor" href="#&#x5411;-filechannel-&#x4E2D;&#x5199;&#x5165;&#x6570;&#x636E;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x5411; FileChannel &#x4E2D;&#x5199;&#x5165;&#x6570;&#x636E;</h3>
+<p>&#x4F7F;&#x7528; write &#x65B9;&#x6CD5;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5411; FileChannel &#x4E2D;&#x5199;&#x5165;&#x6570;&#x636E;&#xFF0C;&#x5728;&#x5199;&#x5165;&#x7684;&#x65F6;&#x5019;&#x4E5F;&#x4F1A;&#x9488;&#x5BF9;&#x5F53;&#x524D; Channel &#x8FDB;&#x884C;&#x540C;&#x6B65;&#x5904;&#x7406;&#x3002;</p>
+<pre class="language-"><code class="lang-java">String newData <span class="token operator">=</span> <span class="token string">&quot;data&quot;</span><span class="token punctuation">;</span>
+ByteBuffer byteBuffer <span class="token operator">=</span> ByteBuffer<span class="token punctuation">.</span><span class="token function">allocate</span><span class="token punctuation">(</span><span class="token number">48</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+byteBuffer<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+byteBuffer<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>newData<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+byteBuffer<span class="token punctuation">.</span><span class="token function">flip</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">while</span> <span class="token punctuation">(</span>byteBuffer<span class="token punctuation">.</span><span class="token function">hasRemaining</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    channel<span class="token punctuation">.</span><span class="token function">wirte</span><span class="token punctuation">(</span>byteBuffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>write &#x65B9;&#x6CD5;&#x4E5F;&#x6709;&#x56DB;&#x79CD;&#x5F62;&#x5F0F;&#xFF0C;&#x542B;&#x4E49;&#x548C;&#x8BFB;&#x53D6;&#x7684;&#x65F6;&#x5019;&#x7C7B;&#x4F3C;</p>
+<pre class="language-"><code class="lang-java"><span class="token comment" spellcheck="true">// &#x5C06; Buffer &#x7684;&#x6570;&#x636E;&#x5199;&#x5165; FileChannel</span>
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">int</span> <span class="token function">write</span><span class="token punctuation">(</span>ByteBuffer src<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// &#x5C06; Buffer &#x7684;&#x6570;&#x636E;&#x5199;&#x5165; FileChannel&#xFF0C;&#x4ECE; position &#x5904;&#x5F00;&#x59CB;&#x5199;&#x5165;</span>
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">int</span> <span class="token function">write</span><span class="token punctuation">(</span>ByteBuffer src<span class="token punctuation">,</span> <span class="token keyword">long</span> position<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// &#x5C06;&#x591A;&#x4E2A; Buffer &#x7684;&#x6570;&#x636E;&#x5199;&#x5165; FileChannel&#xFF0C;gather &#x5F62;&#x5F0F;</span>
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">long</span> <span class="token function">write</span><span class="token punctuation">(</span>ByteBuffer<span class="token punctuation">[</span><span class="token punctuation">]</span> srcs<span class="token punctuation">,</span> <span class="token keyword">int</span> offset<span class="token punctuation">,</span> <span class="token keyword">int</span> length<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// &#x5C06;&#x591A;&#x4E2A; Buffer &#x7684;&#x6570;&#x636E;&#x5199;&#x5165; FileChannel</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">long</span> <span class="token function">write</span><span class="token punctuation">(</span>ByteBuffer<span class="token punctuation">[</span><span class="token punctuation">]</span> srcs<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token function">write</span><span class="token punctuation">(</span>srcs<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> srcs<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="&#x5173;&#x95ED;-filechannel"><a name="&#x5173;&#x95ED;-filechannel" class="anchor-navigation-ex-anchor" href="#&#x5173;&#x95ED;-filechannel"><i class="fa fa-link" aria-hidden="true"></i></a>&#x5173;&#x95ED; FileChannel</h3>
+<p>&#x4F7F;&#x7528;&#x5B8C; FileChannel &#x4E4B;&#x540E;&#x9700;&#x8981;&#x8C03;&#x7528; close &#x65B9;&#x6CD5;&#x5C06;&#x5176;&#x5173;&#x95ED;</p>
+<pre class="language-"><code class="lang-java">channel<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>&#x4E0B;&#x9762;&#x662F; close &#x65B9;&#x6CD5;&#x7684;&#x5B9E;&#x73B0;&#xFF1A;</p>
+<pre class="language-"><code class="lang-java"><span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException <span class="token punctuation">{</span>
+    <span class="token keyword">synchronized</span><span class="token punctuation">(</span>closeLock<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>open<span class="token punctuation">)</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        open <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token function">implCloseChannel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="position"><a name="position" class="anchor-navigation-ex-anchor" href="#position"><i class="fa fa-link" aria-hidden="true"></i></a>position</h3>
+<p>&#x6709;&#x65F6;&#x5019;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5728; FileChannel &#x7684;&#x67D0;&#x4E2A;&#x7279;&#x5B9A;&#x4F4D;&#x7F6E;&#x8FDB;&#x884C;&#x8BFB;&#x5199;&#x64CD;&#x4F5C;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x901A;&#x8FC7; position &#x65B9;&#x6CD5;&#x83B7;&#x53D6;&#x548C;&#x8BBE;&#x7F6E; FileChannel &#x7684;&#x5F53;&#x524D;&#x4F4D;&#x7F6E;</p>
+<pre class="language-"><code class="lang-java"><span class="token comment" spellcheck="true">// &#x83B7;&#x5F97; FileChannel &#x5F53;&#x524D;&#x7684;&#x4F4D;&#x7F6E;</span>
+<span class="token keyword">long</span> pos <span class="token operator">=</span> channel<span class="token punctuation">.</span><span class="token function">position</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// &#x8BBE;&#x7F6E; FileChannel &#x7684;&#x5F53;&#x524D;&#x4F4D;&#x7F6E;</span>
+channel<span class="token punctuation">.</span><span class="token function">position</span><span class="token punctuation">(</span>pos <span class="token operator">+</span> <span class="token number">123</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>&#x5047;&#x8BBE;&#x6211;&#x4EEC;&#x5C06;&#x4F4D;&#x7F6E;&#x8BBE;&#x7F6E;&#x5728;&#x6587;&#x4EF6;&#x7ED3;&#x675F;&#x7B26;&#x4E4B;&#x540E;&#xFF0C;&#x518D;&#x6B21;&#x5BF9; FileChannel &#x8BFB;&#x5199;&#xFF0C;&#x4F1A;&#x51FA;&#x73B0;&#x4E0B;&#x9762;&#x7684;&#x7ED3;&#x679C;&#xFF1A;</p>
+<ul>
+<li>&#x8C03;&#x7528; read &#x65B9;&#x6CD5;&#x8BFB;&#x53D6;&#x6570;&#x636E;&#xFF0C;&#x4F1A;&#x76F4;&#x63A5;&#x653E;&#x56DE; -1&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x6587;&#x4EF6;&#x7ED3;&#x675F;&#x6807;&#x5FD7;</li>
+<li>&#x8C03;&#x7528; write &#x65B9;&#x6CD5;&#x5199;&#x6570;&#x636E;&#xFF0C;&#x6587;&#x4EF6;&#x5C06;&#x6491;&#x5927;&#x5230;&#x5F53;&#x524D;&#x4F4D;&#x7F6E;&#x5E76;&#x5199;&#x5165;&#x6570;&#x636E;&#x3002;&#x8FD9;&#x6709;&#x53EF;&#x80FD;&#x5BFC;&#x81F4; <a href="http://lisux.me/lishuai/?p=189" target="_blank">&#x6587;&#x4EF6;&#x7A7A;&#x6D1E;</a></li>
+</ul>
+<h3 id="size"><a name="size" class="anchor-navigation-ex-anchor" href="#size"><i class="fa fa-link" aria-hidden="true"></i></a>size</h3>
+<p>size &#x65B9;&#x6CD5;&#x5C06;&#x8FD4;&#x56DE; FileChannel &#x5173;&#x8054;&#x6587;&#x4EF6;&#x7684;&#x5927;&#x5C0F;&#xFF1A;</p>
+<pre class="language-"><code class="lang-java"><span class="token keyword">long</span> fileSize <span class="token operator">=</span> channel<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h3 id="truncate"><a name="truncate" class="anchor-navigation-ex-anchor" href="#truncate"><i class="fa fa-link" aria-hidden="true"></i></a>truncate</h3>
+<p>&#x4F7F;&#x7528; truncate &#x65B9;&#x6CD5;&#x53EF;&#x4EE5;&#x622A;&#x53D6;&#x4E00;&#x4E2A;&#x6587;&#x4EF6;&#x3002;&#x622A;&#x53D6;&#x6587;&#x4EF6;&#x65F6;&#xFF0C;&#x6587;&#x4EF6;&#x4E2D;&#x6307;&#x5B9A;&#x957F;&#x5EA6;&#x540E;&#x9762;&#x7684;&#x90E8;&#x5206;&#x5C06;&#x88AB;&#x5220;&#x9664;&#xFF1A;</p>
+<pre class="language-"><code class="lang-java">channel<span class="token punctuation">.</span><span class="token function">truncate</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>&#x4E0A;&#x9762;&#x7684;&#x4F8B;&#x5B50;&#x5C06;&#x4F1A;&#x622A;&#x53D6;&#x6587;&#x4EF6;&#x7684;&#x524D; 1024 &#x4E2A;&#x5B57;&#x8282;&#x3002;</p>
+<h3 id="force"><a name="force" class="anchor-navigation-ex-anchor" href="#force"><i class="fa fa-link" aria-hidden="true"></i></a>force</h3>
+<p>FileChannel &#x4E2D;&#x7684; force &#x65B9;&#x6CD5;&#x4F1A;&#x5C06; Channel &#x4E2D;&#x6CA1;&#x6709;&#x5199;&#x5165;&#x78C1;&#x76D8;&#x7684;&#x6570;&#x636E;&#x5F3A;&#x5236;&#x5199;&#x5230;&#x78C1;&#x76D8;&#x4E2D;&#x3002;&#x51FA;&#x4E8E;&#x6027;&#x80FD;&#x65B9;&#x9762;&#x7684;&#x8003;&#x8651;&#xFF0C;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x4F1A;&#x5C06;&#x6570;&#x636E;&#x7F13;&#x5B58;&#x5230;&#x5185;&#x5B58;&#x4E2D;&#xFF0C;&#x6240;&#x4EE5;&#x65E0;&#x6CD5;&#x4FDD;&#x8BC1;&#x5199;&#x5165;&#x5230; FileChannel &#x4E2D;&#x7684;&#x6570;&#x636E;&#x4E00;&#x5B9A;&#x4F1A;&#x5373;&#x65F6;&#x7684;&#x5199;&#x5230;&#x78C1;&#x76D8;&#x4E2D;&#xFF0C;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x4FDD;&#x8BC1;&#x8FD9;&#x4E00;&#x70B9;&#xFF0C;&#x5C31;&#x8981;&#x8C03;&#x7528; force &#x65B9;&#x6CD5;&#x3002;force &#x65B9;&#x6CD5;&#x6709;&#x4E00;&#x4E2A; boolean &#x7C7B;&#x578B;&#x7684;&#x53C2;&#x6570;&#xFF0C;&#x6307;&#x660E;&#x662F;&#x5426;&#x540C;&#x65F6;&#x5C06;&#x6587;&#x4EF6;&#x5143;&#x6570;&#x636E;&#xFF08;&#x6743;&#x9650;&#x4FE1;&#x606F;&#x7B49;&#xFF09;&#x5199;&#x5165;&#x5230;&#x78C1;&#x76D8;&#x4E2D;&#x3002;</p>
+<pre class="language-"><code class="lang-java">channel<span class="token punctuation">.</span><span class="token function">force</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h3 id="&#x6587;&#x4EF6;&#x9501;&#x5B9A;"><a name="&#x6587;&#x4EF6;&#x9501;&#x5B9A;" class="anchor-navigation-ex-anchor" href="#&#x6587;&#x4EF6;&#x9501;&#x5B9A;"><i class="fa fa-link" aria-hidden="true"></i></a>&#x6587;&#x4EF6;&#x9501;&#x5B9A;</h3>
+<p>&#x901A;&#x8FC7; FileChannel &#x7684; lock &#x548C; tryLock &#x65B9;&#x6CD5;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5BF9;&#x6587;&#x4EF6;&#x8FDB;&#x884C;&#x52A0;&#x9501;&#x3002;&#x6CE8;&#x610F;&#x8FD9;&#x91CC;&#x7684;&#x6587;&#x4EF6;&#x9501;&#x662F;&#x4E0E;&#x5177;&#x4F53;&#x7684;&#x6587;&#x4EF6;&#x8FDB;&#x884C;&#x5173;&#x8054;&#x7684;&#xFF0C;&#x800C;&#x4E0D;&#x662F; Channel &#x5173;&#x8054;&#x3002;&#x6587;&#x4EF6;&#x9501;&#x4E3B;&#x8981;&#x662F;&#x9488;&#x5BF9;&#x5916;&#x90E8;&#x8FDB;&#x7A0B;&#xFF0C;&#x4E5F;&#x5C31;&#x8BF4;&#x5982;&#x679C;&#x6587;&#x4EF6;&#x9501;&#x88AB;&#x4E00;&#x4E2A;&#x8FDB;&#x7A0B;&#x83B7;&#x5F97;&#xFF0C;&#x90A3;&#x4E48;&#x5176;&#x4ED6;&#x8FDB;&#x7A0B;&#x5C31;&#x65E0;&#x6CD5;&#x518D;&#x6B21;&#x8BBF;&#x95EE;&#x8BE5;&#x6587;&#x4EF6;&#xFF0C;&#x4F46;&#x662F;&#x83B7;&#x5F97;&#x9501;&#x8FDB;&#x7A0B;&#x5185;&#x90E8;&#x7684;&#x7EBF;&#x7A0B;&#x8FD8;&#x662F;&#x5171;&#x4EAB;&#x6587;&#x4EF6;&#x7684;&#x3002;&#x4E0B;&#x9762;&#x662F; FileChannel &#x4E0E;&#x9501;&#x76F8;&#x5173;&#x7684;&#x51E0;&#x4E2A;&#x51FD;&#x6570;&#xFF1A;</p>
+<pre class="language-"><code class="lang-java"><span class="token comment" spellcheck="true">// &#x4ECE; position &#x4F4D;&#x7F6E;&#x5F00;&#x59CB;&#xFF0C;&#x9501;&#x5B9A; size &#x957F;&#x5EA6;&#x7684;&#x5185;&#x5BB9;&#xFF0C;shared &#x8868;&#x793A;&#x9501;&#x662F;&#x5426;&#x662F;&#x5171;&#x4EAB;&#x7684;</span>
+<span class="token comment" spellcheck="true">// &#x5982;&#x679C;&#x8981;&#x83B7;&#x53D6;&#x5171;&#x4EAB;&#x9501;&#xFF0C;&#x8981;&#x4EE5;&#x53EA;&#x8BFB;&#x6743;&#x9650;&#x6253;&#x5F00;&#x6587;&#x4EF6;&#xFF0C;&#x5982;&#x679C;&#x60F3;&#x8981;&#x83B7;&#x53D6;&#x72EC;&#x5360;&#x9501;&#xFF0C;&#x5219;&#x9700;&#x8981;&#x5199;&#x6743;&#x9650;</span>
+<span class="token comment" spellcheck="true">// &#x5982;&#x679C;&#x83B7;&#x53D6;&#x4E0D;&#x5230;&#x9501;&#xFF0C;&#x8FDB;&#x7A0B;&#x5C31;&#x4F1A;&#x5904;&#x4E8E;&#x963B;&#x585E;&#x72B6;&#x6001;&#x3002;</span>
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> FileLock <span class="token function">lock</span><span class="token punctuation">(</span><span class="token keyword">long</span> position<span class="token punctuation">,</span> <span class="token keyword">long</span> size<span class="token punctuation">,</span> <span class="token keyword">boolean</span> shared<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">final</span> FileLock <span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token function">lock</span><span class="token punctuation">(</span><span class="token number">0</span> L<span class="token punctuation">,</span> Long<span class="token punctuation">.</span>MAX_VALUE<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// &#x5982;&#x679C;&#x83B7;&#x53D6;&#x4E0D;&#x5230;&#x9501;&#xFF0C;&#x4F1A;&#x76F4;&#x63A5;&#x8FD4;&#x56DE; null</span>
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> FileLock <span class="token function">tryLock</span><span class="token punctuation">(</span><span class="token keyword">long</span> position<span class="token punctuation">,</span> <span class="token keyword">long</span> size<span class="token punctuation">,</span> <span class="token keyword">boolean</span> shared<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">final</span> FileLock <span class="token function">tryLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token function">tryLock</span><span class="token punctuation">(</span><span class="token number">0</span> L<span class="token punctuation">,</span> Long<span class="token punctuation">.</span>MAX_VALUE<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>&#x4E0B;&#x9762;&#x662F; FileLock &#x7684;&#x51E0;&#x4E2A;&#x65B9;&#x6CD5;&#xFF1A;</p>
+<pre class="language-"><code class="lang-java">
+
+</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="Buffer.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Buffer">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Channel","level":"1.2.2","depth":2,"previous":{"title":"Buffer","level":"1.2.1","depth":2,"path":"Buffer.md","ref":"Buffer.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-lunr","-search","-highlight","-livereload","search-plus@^0.0.11","simple-page-toc@0.1.1","github@^2.0.0","edit-link@^2.0.2","prism@^2.1.0","prism-themes@^0.0.2","anchors@^0.7.1","-expandable-chapters-small@^0.1.7","-duoshuo","disqus","3-ba","sitemap-general@^0.1.1","anchor-navigation-ex@0.1.8","favicon@^0.0.2","3-ba@^0.9.0","fancybox"],"root":".","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"prism":{"css":["prism-themes/themes/prism-base16-ateliersulphurpool.light.css"]},"disqus":{"useIdentifier":false,"shortName":"book-2"},"fancybox":{"helpers":{"buttons":{}}},"github":{"url":"https://github.com/zhangjikai/java-nio-learn"},"simple-page-toc":{"maxDepth":4,"skipFirstH1":true},"duoshuo":{"short_name":"zhangjkblog","theme":"default"},"donate":{"wechat":"https://zhangjikai.com/resource/weixin.png","alipay":"https://zhangjikai.com/resource/alipay.png","title":"","button":"赏","alipayText":"支付宝打赏","wechatText":"微信打赏"},"sitemap-general":{"prefix":"http://nio.zhangjikai.com"},"fontsettings":{"theme":"white","family":"sans","size":2},"anchor-navigation-ex":{"isRewritePageTitle":false,"tocLevel1Icon":"fa fa-hand-o-right","tocLevel2Icon":"fa fa-hand-o-right","tocLevel3Icon":"fa fa-hand-o-right"},"favicon":{"shortcut":"favicon.ico","bookmark":"favicon.ico"},"prism-themes":{},"3-ba":{"configuration":"auto","token":"ff100361cdce95dd4c8fb96b4009f7bc"},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":true,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/zhangjikai/java-nio-learn/edit/master"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":true},"anchors":{},"search-plus":{}},"theme":"default","author":"zhangjikai","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Java NIO Learn","language":"zh-hans","output.name":"site","links":{"sidebar":{"Home":"http://www.zhangjikai.com"}},"gitbook":"3.2.2","description":"Java NIO 学习笔记"},"file":{"path":"Channel.md","mtime":"2017-05-13T12:49:46.634Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-05-13T12:53:48.211Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-search-plus/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search-plus/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-edit-link/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.16.1/URI.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-disqus/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-3-ba/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fancybox/jquery.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fancybox/jquery.mousewheel.pack.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fancybox/jquery.fancybox.pack.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fancybox/jquery.fancybox-buttons.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fancybox/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
