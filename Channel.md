@@ -154,5 +154,206 @@ public final FileLock tryLock() throws IOException {
 
 下面是 FileLock 的几个方法：
 ```java
+// 查询创建该锁的 FileChannel 对象
+public final FileChannel channel()
 
+// 释放锁
+public abstract void release() throws IOException;
+
+// 返回文件被锁住的起始位置
+public final long position() {
+    return position;
+}
+
+// 返回文件被锁住的大小
+public final long size() {
+    return size;
+}
+
+// 判断是否是共享锁
+public final boolean isShared() {
+    return shared;
+}
+
+// 判断锁是否有效
+public abstract boolean isValid();
+
+// 主要用于 try 代码块中自动关闭资源
+public final void close() throws IOException {
+    release();
+}
 ```
+
+### Zero Copy
+[通过零拷贝实现有效数据传输](https://www.ibm.com/developerworks/cn/java/j-zerocopy/)
+
+## Socket Channel
+Socket 通道主要处理网络数据流，主要有下面 3 个类：
+* ServerSocketChannel - 服务器套接字通道，用于 TCP 协议，监听传入的连接以及创建新的 SocketChannel 对象。ServerSocketChannel 本身不传输数据。
+* SocketChannel - 套接字通道，用于 TCP 协议。当客户端连接到服务器之后，服务器和客户端都会有一个 SocketChannel，两者通过 SocketChannel 进行通信。
+* DatagramChannel - 数据报通道，用于 UDP 协议。
+
+Socket 通道可以以非阻塞模式运行，极大的提高了程序的性能，下面是相关方法：
+```java
+// block=false：非阻塞模式；block=true：阻塞模式
+public abstract SelectableChannel configureBlocking(boolean block) throws IOException;
+
+// 查询当前通道是否处于阻塞模式
+public abstract boolean isBlocking();
+```
+### ServerSocketChannel
+ServerSocketChannel 是一个基于通道的 socket 监听器，它主要用来监听传入的请求，并为该请求创建一个关联的 SocketChannel 对象，服务器和客户端最终还是通过 SocketChannel 对象进行传输数据的。
+```java
+// 创建 ServerSocketChannel 对象，只能同静态的 open 方法创建
+ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+
+// 绑定监听地址，ServerSocketChannel 对象本身无法设置监听地址，
+// 需要通过其关联的 ServerSocket 对象来设置
+serverSocketChannel.socket().bind(new InetSocketAddress(port));
+
+// 设为非阻塞模式
+serverSocketChannel.configureBlocking(false);
+
+while (true) {
+	// accept 用来监听新的连接，因为是非阻塞模式，没有链接会返回 null
+    SocketChannel socketChannel = serverSocketChannel.accept();
+}
+```
+### SocketChannel
+我们通过 SocketChannel 来传输数据，每个 SocketChannel 对象都会关联一个 Socket 对象，我们有两种方式获得 SocketChannel
+* 调用 SocketChannel 的 open 方法
+* 当一个新连接到达 ServerSocketChannel 时，会创建一个 SocketChannel
+
+通过 open 方法获得 SocketChannel 对象需要连接之后才能使用，如果对个未连接的 SocketChannel 对象执行 IO 操作，会抛出 NotYetConnectedException，下面是一个使用示例：
+```java
+String host = "localhost";
+int port = 1234;
+InetSocketAddress address = new InetSocketAddress(host, port);
+
+// 创建 SocketChannel 对象
+SocketChannel socketChannel = SocketChannel.open();
+
+// 设为非阻塞模式
+socketChannel.configureBlocking(false);
+
+// 链接服务器
+socketChannel.connect(address);
+
+// 判断是否已经建立连接
+while (!socketChannel.finishConnect()) {
+	// 在建立连接的过程中可以做一些其他的操作
+    System.out.println("do other things...");
+}
+
+ByteBuffer buffer = ByteBuffer.allocate(100);
+int readLen;
+
+// 这里采用了非阻塞模式，因此 read 方法可能会直接返回 0，
+// 即没有读到内容。但是只有读到 -1 时，才表明 socket 中
+// 的数据已经读取完毕
+while ((readLen = socketChannel.read(buffer)) != -1) {
+    if (readLen != 0) {
+        String result = new String(buffer.array()).trim();
+        System.out.println(result);
+    }
+}
+
+// 关闭 socketChannel
+socketChannel.close();
+```
+Socket 是面向流（stream-oriented）的，而不是面向包（packet-oriented）的，它只能保证发送的字节会按照顺序到达，但是无法保证同时维持字节分组，假设向 socket 中传入了 20 个字节，那么调用 read 方法有可能只能读到 3 个字节，而剩余的 17 个字节还在传输中。
+
+下面是 SokcetChannel 中的一些方法：
+
+```java
+// 判断是否完成连接过程
+public abstract boolean finishConnect() throws IOException;
+
+// 判断是否建立了连接
+public abstract boolean isConnected();
+
+// 判断当前 Channel 是否正在建立连接
+public abstract boolean isConnectionPending();
+
+// 从 Channel 读取数据到 Buffer
+public abstract int read(ByteBuffer dst) throws IOException;
+
+// 从 Channel 读取数据到 多个 Buffer
+public abstract long read(ByteBuffer[] dsts, int offset, int length) throws IOException;
+
+public final long read(ByteBuffer[] dsts) throws IOException {
+    return read(dsts, 0, dsts.length);
+}
+
+// 将 Buffer 中的数据写入到 Channel
+public abstract int write(ByteBuffer src) throws IOException;
+
+// 将多个 Buffer 中的数据写入到 Channel
+public abstract long write(ByteBuffer[] srcs, int offset, int length) throws IOException;
+
+public final long write(ByteBuffer[] srcs) throws IOException {
+    return write(srcs, 0, srcs.length);
+}
+```
+### DatagramChannel
+DatagramChannel 主要通过 UDP 传输数据。UDP 是无连接的网络协议，所以 DatagramChannel 发送和接收的都是数据包，每个数据包都是一个独立的实体，包含自己的目标地址。DatagramChannel 对象既可以充当服务器，也可以充当客户端，如果希望 DatagramChannel 作为服务端，需要首先为其绑定一个地址。下面是一个示例：
+
+> Server
+
+```java
+// 创建 DatagramChannel
+DatagramChannel datagramChannel = DatagramChannel.open();
+
+// 绑定地址监听，作为服务端
+datagramChannel.socket().bind(new InetSocketAddress(1111));
+ByteBuffer buffer = ByteBuffer.allocate(64);
+while (true) {
+    // 接受客户端发送过来的数据，如果数据的长度大于
+    // Buffer 的空间，那么多余的数据会被丢弃
+    // receive 方法会返回一个 SocketAddress 对象以指明数据来源
+    datagramChannel.receive(buffer);
+    buffer.flip();
+    while (buffer.hasRemaining()) {
+        System.out.write(buffer.get());
+    }
+    System.out.println();
+    buffer.clear();
+}
+```
+
+> Client
+
+```java
+List < String > textList = new ArrayList < > (
+    Arrays.asList("1111", "2222", "3333", "4444")
+);
+InetAddress hostIP = InetAddress.getLocalHost();
+InetSocketAddress address = new InetSocketAddress(hostIP, 1111);
+
+// 创建 DatagramChannel
+DatagramChannel datagramChannel = DatagramChannel.open();
+datagramChannel.bind(null);
+
+ByteBuffer buffer = ByteBuffer.allocate(64);
+for (String text: textList) {
+    System.out.println("sending msg: " + text);
+    buffer.put(text.getBytes());
+    buffer.flip();
+
+    //  发送数据时要指定目标地址
+    datagramChannel.send(buffer, address);
+    buffer.clear();
+}
+```
+
+在阻塞模式下，receive 方法可能无限期的休眠直到有数据包到达，而处于非阻塞模式下时，当没有可接收的数据包时会返回 null。
+
+通过调用 connect 方法，可以连接一个 DatagramChannel，这里的连接只是绑定了一个 DatagramChannel，实际上并没有建立连接。当两个 DatagramChannel 处于连接状态时，它们只能相互通信。使用 disconnect 方法可以断开连接。
+
+下面是使用数据报的情形：
+• Your application can tolerate lost or out-of-order data.
+• You want to fire and forget and don't need to know if the packets you sent were
+received.
+• Throughput is more important than reliability.
+• You need to send to multiple receivers (multicast or broadcast) simultaneously.
+• The packet metaphor fits the task at hand better than the stream metaphor.
