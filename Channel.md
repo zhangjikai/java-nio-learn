@@ -351,9 +351,8 @@ for (String text: textList) {
 通过调用 connect 方法，可以连接一个 DatagramChannel，这里的连接只是绑定了一个 DatagramChannel，实际上并没有建立连接。当两个 DatagramChannel 处于连接状态时，它们只能相互通信。使用 disconnect 方法可以断开连接。
 
 下面是使用数据报的情形：
-• Your application can tolerate lost or out-of-order data.
-• You want to fire and forget and don't need to know if the packets you sent were
-received.
-• Throughput is more important than reliability.
-• You need to send to multiple receivers (multicast or broadcast) simultaneously.
-• The packet metaphor fits the task at hand better than the stream metaphor.
+* Your application can tolerate lost or out-of-order data.
+* You want to fire and forget and don't need to know if the packets you sent were received.
+* Throughput is more important than reliability.
+* You need to send to multiple receivers (multicast or broadcast) simultaneously.
+* The packet metaphor fits the task at hand better than the stream metaphor.
